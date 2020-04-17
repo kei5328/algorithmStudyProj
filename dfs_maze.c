@@ -39,7 +39,7 @@ n: size of an array
 */
 void randomize ( int arr[], int n )
 {   // use the different timing to generate random num
-    srand ( time(NULL) );
+    //srand ( time(NULL) );
     for (int ii = n-1; ii > 0; ii--)
     {
         int jj = rand() % (ii+1);
