@@ -1,4 +1,11 @@
 
+/*
+Solving the "Number of Islands" problem on https://leetcode.com/problems/number-of-islands/
+Using DFS algorithm to find the number of islands.
+To save space, the input array is directly modified for the indication of the color.
+Since the search path is not important for this problem, there is neither time or parent indication for the search.
+*/
+
 #include<stdio.h>
 #include<stdint-gcc.h>
 #include<stdbool.h>
@@ -23,7 +30,7 @@ void fill_shift_nums(uint8_t adj_num, uint8_t adj_vert, int8_t * row_shift, int8
     for (int ii = 0; ii<4; ii++)
     {
         if (adj_vert & 0x01)
-        {
+        {// the lowest bit is 1.
             if (ii==0)
             { // top
                 *(row_shift+temp) = -1;
@@ -47,6 +54,7 @@ void fill_shift_nums(uint8_t adj_num, uint8_t adj_vert, int8_t * row_shift, int8
             }
             temp++;
         }
+        // bit shift right to get the higher bit
         adj_vert = adj_vert >> 1;
     }
 }
@@ -146,16 +154,14 @@ grid: 2D array of char.
 int numIslands(char** grid, int gridSize, int* gridColSize){
 
 
-    // Start from the left
+    //
     /*
-    1. From left top, check if it's 1 && being white
+    Checking whether to start search: use the original grid to keep track of the color. (white == 1, gray == 2, black == 3).
+    1. From left top, check if it's 1(white, land not visited).
     2. if yes, perform DFS.
-        set all the visited cells to be black (<- This has to be accessible )
-    3. increase the island count.
+        set all the visited cells to be gray(and black when all adjacent cells are visted) (<- modify the number of input grid for the coloring)
+    3. Increase the island count.
     4. Finish when the iteration of the cell loop end and return the island count
-
-    Consideration:
-        The color of the cells has to be accessible in the top level.
     */
     int islandCnt = 0;
     for (int row_i=0; row_i<gridSize; row_i++)
@@ -225,5 +231,14 @@ for (int ii=0; ii<gridSize; ii++)
 
     int islandCnt = numIslands(grid, gridSize, &gridColSize);
     printf("island Count = %d\n", islandCnt); // results
+
+
+    // free malloc memory
+    for (int ii=0;ii<gridSize; ii++)
+    {
+        free(grid[ii]);
+    }
+    free(grid);
+
     return 0;
 }
