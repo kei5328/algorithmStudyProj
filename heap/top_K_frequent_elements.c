@@ -28,6 +28,15 @@ struct hash_map * init_map(int bin_size)
     }
     return p_map;
 }
+
+//frees a map structure
+void free_map(struct hash_map * p_map)
+{
+    free(p_map->marr);
+    free(p_map);
+}
+
+
 // initialize min heap. returns a pointer to a malloced min heap.
 struct min_heap * init_heap(int max_size)
 {
@@ -37,6 +46,13 @@ struct min_heap * init_heap(int max_size)
     p_min_h->harr = (struct hash_node **)malloc(sizeof(struct hash_node*)*max_size);
     return p_min_h;
 }
+
+void free_heap(struct min_heap * p_heap)
+{
+    free(p_heap->harr);
+    free(p_heap);
+}
+
 // hash function(chaining is used so only one function is good enough)
 int calc_hash(int key, int bins)
 {
@@ -227,5 +243,7 @@ int* topKFrequent(int* nums, int numsSize, int k, int* returnSize){
     {
         *(p_result+ii) = (p_heap->harr[ii]->key);
     }
+    free_map(p_map);
+    free_heap(p_heap);
     return p_result;
 }
